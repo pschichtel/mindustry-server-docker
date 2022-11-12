@@ -12,7 +12,7 @@ jobs:
         DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
         DOCKERHUB_PASSWORD: "${{ secrets.DOCKERHUB_PASSWORD }}"
       run: |
-        version="126.2"
+        version="140.3"
         image_name="pschichtel/mindustry-server:v${version}"
         echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
         docker build . --file Dockerfile --build-arg=version="$version" --tag "$image_name"
