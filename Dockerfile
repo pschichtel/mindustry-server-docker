@@ -2,7 +2,7 @@ FROM alpine:3.16 AS builder
 
 RUN apk add --update --no-cache curl
 
-ARG VERSION=140.3
+ARG VERSION=140.4
 
 RUN curl -L -s -o "/server.jar" "https://github.com/Anuken/Mindustry/releases/download/v${VERSION}/server-release.jar"
 
