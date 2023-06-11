@@ -1,22 +1,37 @@
-FROM alpine:3.16 AS builder
+FROM docker.io/library/eclipse-temurin:17-jdk-jammy AS tcp-wrapper
 
-RUN apk add --update --no-cache curl
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends git
 
-ARG VERSION=140.4
+WORKDIR /src
 
-RUN curl -L -s -o "/server.jar" "https://github.com/Anuken/Mindustry/releases/download/v${VERSION}/server-release.jar"
+ARG TCP_WRAPPER_REF=main
 
-FROM eclipse-temurin:17-jre-alpine
+RUN git clone --depth=1 -b "$TCP_WRAPPER_REF" https://github.com/pschichtel/tcp-process-wrapper.git .
 
-RUN adduser -S -D -h "/opt/mindustry" mindustry
+RUN ./gradlew linkReleaseExecutableNative
+
+FROM docker.io/curlimages/curl:8.1.2 AS mindustry
+
+ARG VERSION=144.3
+
+RUN curl -L -s -o "/tmp/server.jar" "https://github.com/Anuken/Mindustry/releases/download/v${VERSION}/server-release.jar"
+
+FROM docker.io/library/eclipse-temurin:17-jre-jammy
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends bash \
+ && apt-get clean
+
+COPY --from=tcp-wrapper /src/build/bin/native/releaseExecutable/tcp-wrapper.kexe /usr/local/bin/tcp-wrapper
+
+RUN adduser --system --home /opt/mindustry --group mindustry
 
 USER mindustry
 
 WORKDIR "/opt/mindustry"
 
-RUN mkdir "/opt/mindustry/config"
-
-COPY entrypoint.sh "/opt/mindustry/entrypoint.sh"
+RUN mkdir -p "/opt/mindustry/config" "/opt/mindustry/pipes"
 
 ENTRYPOINT [ "/opt/mindustry/entrypoint.sh" ]
 
@@ -24,4 +39,6 @@ CMD [ "help,exit" ]
 
 VOLUME [ "/opt/mindustry/config" ]
 
-COPY --from=builder "/server.jar" "/opt/mindustry/server.jar"
+COPY --from=mindustry "/tmp/server.jar" "/opt/mindustry/server.jar"
+
+COPY entrypoint.sh "/opt/mindustry/entrypoint.sh"

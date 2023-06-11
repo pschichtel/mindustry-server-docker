@@ -1,5 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-cd /opt/mindustry
-exec java -jar server.jar "$@"
+tcp-wrapper java -jar server.jar
 
