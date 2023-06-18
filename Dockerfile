@@ -13,7 +13,7 @@ RUN ./gradlew linkReleaseExecutableNative
 
 FROM docker.io/curlimages/curl:8.1.2 AS mindustry
 
-ARG VERSION=144.3
+ARG VERSION=145
 
 RUN curl -L -s -o "/tmp/server.jar" "https://github.com/Anuken/Mindustry/releases/download/v${VERSION}/server-release.jar"
 
