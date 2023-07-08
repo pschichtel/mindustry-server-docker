@@ -13,7 +13,7 @@ RUN ./gradlew linkReleaseExecutableNative
 
 FROM docker.io/curlimages/curl:8.1.2 AS mindustry
 
-ARG VERSION=145
+ARG VERSION=145.1
 
 RUN curl -L -s -o "/tmp/server.jar" "https://github.com/Anuken/Mindustry/releases/download/v${VERSION}/server-release.jar"
 
@@ -35,7 +35,7 @@ RUN mkdir -p "/opt/mindustry/config" "/opt/mindustry/pipes"
 
 ENTRYPOINT [ "/opt/mindustry/entrypoint.sh" ]
 
-CMD [ "help,exit" ]
+CMD [ "help", "exit" ]
 
 VOLUME [ "/opt/mindustry/config" ]
 
