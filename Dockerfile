@@ -5,7 +5,7 @@ RUN apt-get update \
 
 WORKDIR /src
 
-ARG TCP_WRAPPER_REF=main
+ARG TCP_WRAPPER_REF=0.1.0
 
 RUN git clone --depth=1 -b "$TCP_WRAPPER_REF" https://github.com/pschichtel/tcp-process-wrapper.git .
 
