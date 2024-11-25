@@ -11,7 +11,7 @@ RUN git clone --depth=1 -b "$TCP_WRAPPER_REF" https://github.com/pschichtel/tcp-
 
 RUN ./gradlew linkReleaseExecutableNative
 
-FROM docker.io/curlimages/curl:8.1.2 AS mindustry
+FROM docker.io/curlimages/curl:8.11.0 AS mindustry
 
 ARG VERSION=145.1
 
