@@ -1,4 +1,4 @@
-FROM docker.io/library/eclipse-temurin:21-jdk-jammy AS tcp-wrapper
+FROM docker.io/library/eclipse-temurin:22-jdk-jammy AS tcp-wrapper
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends git
@@ -17,7 +17,7 @@ ARG VERSION=146
 
 RUN curl -L -s -o "/tmp/server.jar" "https://github.com/Anuken/Mindustry/releases/download/v${VERSION}/server-release.jar"
 
-FROM docker.io/library/eclipse-temurin:21-jre-jammy
+FROM docker.io/library/eclipse-temurin:22-jre-jammy
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends bash \
